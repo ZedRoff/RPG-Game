@@ -17,7 +17,7 @@ public class Main {
 
             
             for(Commands cmd: Commands.getCommands()) {
-                System.out.println(String.format("\t- /%s : %s", cmd.toString(), cmd.help_msg));
+                System.out.println(String.format("\t- /%s : %s", cmd.toString().toLowerCase(), cmd.help_msg));
             }
    
       boolean running = true;
@@ -27,13 +27,31 @@ public class Main {
                 switch(arr[0]) {
                     case "/inventory":
                         System.out.println("Here is your inventory :");
+                        if(player.getCard().get("name") == null) {
+                            System.out.println("You don't have any card yet.");
+                        } else {
+                        
+                        for(String key: player.getCard().keySet()) {
+                            System.out.println(String.format("%s- %s", key, player.getCard().get(key)));
+                        }
+                    }
+                     
                     break;
                     case "/quit": 
                         System.out.println("Thanks for playing this game, see you later !");
                         running = false;
                     break;
                     case "/battle": 
-                        System.out.println("Oh, a monster has spawned, you have to battle him :");
+                        if(player.getCard().size() == 0) {
+                            System.out.println("You don't have any card, you can't battle ! Run /collect to get a card !");
+                        } else {
+                            System.out.println("Oh, a monster has spawned, you have to battle him :");
+                            Enemy enemy = new Enemy("Monster", 1);
+                            System.out.println(String.format("The monster's name is %s and his level is %s. Total Health : %s", enemy.getName(), enemy.getLevel(), enemy.getLevel()));
+                            
+
+                        }
+                        
                     break;
                     case "/card":
                          if(checkArgs(arr).length() > 0) {System.out.println(checkArgs(arr)); break;}
@@ -41,6 +59,26 @@ public class Main {
                     break;
                     case "/collect": 
                         System.out.println("A random card has spawned, its :");
+                        HashMap<String, String> given_card = new HashMap<String, String>();
+                        Card card_found = new Card("Card", 100.0, 10);
+                        given_card.put("name", card_found.getName());
+                        given_card.put("health", card_found.getHealth().toString());
+                        given_card.put("damages", card_found.getDamages().toString());
+                        
+                        System.out.println(String.format("A %s has spawned, its health is %s and its damages are %s.\n==============\nDo you want to erase your past card %s", card_found.getName(), card_found.getHealth(), card_found.getDamages(), player.getCard().get("name")));
+                        String answer = user_entry.nextLine();
+                       
+                        if(answer.length() == 3) {
+                            
+                            player.setCard(given_card);
+                      
+                            System.out.println("Your card has been replaced !");
+                        } else {
+                            System.out.println("Your card has not been replaced !");
+                        }
+
+                        
+                        
                     break;
                     case "/help": 
                         System.out.println("Here is the help page :");

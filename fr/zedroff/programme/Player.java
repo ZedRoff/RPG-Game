@@ -17,6 +17,9 @@ public class Player {
     public HashMap<String, String> getCard() {
         return card;
     }
+    public void setCard(HashMap<String, String> newCard) {
+        this.card = newCard;
+    }
 
   
 
