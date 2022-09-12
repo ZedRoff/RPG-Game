@@ -1,15 +1,30 @@
 public class Enemy {
     private String name;
-    private Integer level;
-    public Enemy(String name, Integer level) {
+  
+    private Integer health;
+    private Integer damages;
+    public Enemy(String name, Integer health, Integer damages) {
         this.name = name;
-        this.level = level;
+    
+        this.health = health;
+        this.damages = damages;
+
 
     }
     public String getName() {
         return name;
     }
-    public Integer getLevel() {
-        return level;
+    
+    public Integer getHealth() {
+        return health;
     }
+    public Integer getDamages() {
+        return damages;
+    }
+    
+    public Integer setHealth(Integer newHealth) {
+        return health = newHealth;
+    }
+
+
 }

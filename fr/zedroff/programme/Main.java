@@ -1,10 +1,12 @@
 
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
 
+import java.util.concurrent.TimeUnit;
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
        
         
         try (Scanner user_entry = new Scanner(System.in)) {
@@ -46,9 +48,34 @@ public class Main {
                             System.out.println("You don't have any card, you can't battle ! Run /collect to get a card !");
                         } else {
                             System.out.println("Oh, a monster has spawned, you have to battle him :");
-                            Enemy enemy = new Enemy("Monster", 1);
-                            System.out.println(String.format("The monster's name is %s and his level is %s. Total Health : %s", enemy.getName(), enemy.getLevel(), enemy.getLevel()));
-                            
+                            Random rand = new Random();
+                            Integer health = rand.nextInt(100);
+                            int damages = rand.nextInt(25);
+                            String name = "Monster" + rand.nextInt(100);
+                            Enemy enemy = new Enemy(name, health, damages);
+                            System.out.println(String.format("The monster's name is %s. Total Health : %s", enemy.getName(), enemy.getHealth()));
+                         
+                            boolean turn = rand.nextBoolean();
+                            while(player.getCardHealth() > 0 || enemy.getHealth() > 0) {
+                                TimeUnit.SECONDS.sleep(2);
+                                if(turn) {
+                                    player.setCardHealth(player.getCardHealth() - enemy.getDamages());
+                                    System.out.println(String.format("You attacked the monster with %s damages, he has now %s health left.", player.getCardDamages(), enemy.getHealth()));
+                                    turn = !turn;
+                                }else {
+                                    enemy.setHealth(enemy.getHealth() - player.getCardDamages());
+                                    System.out.println(String.format("The monster attacked you with %s damages, you have now %s health left.", enemy.getDamages(), player.getCardHealth()));
+                                    turn = !turn;
+                                }
+                                
+                            }
+                            if(player.getCardHealth() <= 0) {
+                                System.out.println("You lost the battle !");
+                              
+                            } else {
+                                System.out.println("You won the battle !");
+                            }
+
 
                         }
                         
@@ -60,12 +87,21 @@ public class Main {
                     case "/collect": 
                         System.out.println("A random card has spawned, its :");
                         HashMap<String, String> given_card = new HashMap<String, String>();
-                        Card card_found = new Card("Card", 100.0, 10);
+                        Random rand = new Random();
+                            Integer health = rand.nextInt(100);
+                            int damages = rand.nextInt(25);
+                            String name = "Card " + rand.nextInt(100);
+                        Card card_found = new Card(name, health, damages);
                         given_card.put("name", card_found.getName());
                         given_card.put("health", card_found.getHealth().toString());
                         given_card.put("damages", card_found.getDamages().toString());
-                        
-                        System.out.println(String.format("A %s has spawned, its health is %s and its damages are %s.\n==============\nDo you want to erase your past card %s", card_found.getName(), card_found.getHealth(), card_found.getDamages(), player.getCard().get("name")));
+                        String past_card;
+                        if(player.getCard().get("name") == null) {
+                            past_card = "(you don't have any card, gotta fix this =})";
+                        } else {
+                            past_card = player.getCard().get("name");
+                        }
+                        System.out.println(String.format("A %s has spawned, its health is %s and its damages are %s.\n==============\nDo you want to erase your past card %s", card_found.getName(), card_found.getHealth(), card_found.getDamages(), past_card));
                         String answer = user_entry.nextLine();
                        
                         if(answer.length() == 3) {

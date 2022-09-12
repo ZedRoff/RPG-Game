@@ -1,9 +1,9 @@
 public class Card {
     private Integer damages;
     private String name;
-    private Double health;
+    private Integer health;
 
-    public Card(String name, Double health, Integer damages) {
+    public Card(String name, Integer health, Integer damages) {
         this.damages = damages;
         this.name = name;
         this.health = health;
@@ -15,18 +15,10 @@ public class Card {
     public String getName() {
         return name;
     }
-    public Double getHealth() {
+    public Integer getHealth() {
         return health;
     }
-    public void setDamages(Integer newDamages) {
-        this.damages = newDamages;
-    }
-    public void setName(String newName) {
-        this.name = newName;
-    }
-    public void setHealth(Double newHealth) {
-        this.health = newHealth;
-    }
+  
     
 
 
